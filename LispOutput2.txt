@@ -1,0 +1,154 @@
+ert283@fox02:~/courses/cs3723/assignment2$ clisp
+  i i i i i i i       ooooo    o        ooooooo   ooooo   ooooo
+  I I I I I I I      8     8   8           8     8     o  8    8
+  I  \ `+' /  I      8         8           8     8        8    8
+   \  `-+-'  /       8         8           8      ooooo   8oooo
+    `-__|__-'        8         8           8           8  8
+        |            8     o   8           8     o     8  8
+  ------+------       ooooo    8oooooo  ooo8ooo   ooooo   8
+
+Welcome to GNU CLISP 2.49 (2010-07-07) <http://clisp.cons.org/>
+
+Copyright (c) Bruno Haible, Michael Stoll 1992, 1993
+Copyright (c) Bruno Haible, Marcus Daniels 1994-1997
+Copyright (c) Bruno Haible, Pierpaolo Bernardi, Sam Steingold 1998
+Copyright (c) Bruno Haible, Sam Steingold 1999-2000
+Copyright (c) Sam Steingold, Bruno Haible 2001-2010
+
+Type :h and hit Enter for context help.
+
+[1]> (load "p2Lisp.txt" :echo T :print T)
+;; Loading file p2Lisp.txt ...
+(defun removeNILTop (L) 
+(cond ((null L) nil) ((and (not (null (car L))) (cons (car L) (removeNILTop (cdr L)))))
+   (T (append (car L) (removeNILTop (cdr L))))
+    )
+)
+REMOVENILTOP
+
+
+(defun removeNILMost (L) 
+(cond ((null L) nil) ((not (atom (car L))) (cons (removeNILMost (car L)) (removeNILMost (cdr L)))) ((eql nil (car L)) (removeNILMost (cdr L)))
+    (T (cons (car L) (removeNILMost (cdr L))))
+        )
+)
+REMOVENILMOST
+
+
+(defun reverseTop (L) 
+(cond ((null L) nil) 
+    (T (append (reverseTop (cdr L)) (list (car L))))
+        )
+)
+REVERSETOP
+
+
+(defun reverseAll (L) 
+(cond ((null L) nil) ((listp (car L)) (append (reverseAll (cdr L)) (list (reverseAll (car L)))))
+    (T (append (reverseAll (cdr L)) (list (car L))))
+        )
+)
+REVERSEALL
+
+
+(defun palindrome (L)
+    (cond ((null L) nil)
+        (T (equal L (reverse L)))
+          )
+)
+PALINDROME
+
+
+
+(defun removeNILAll (L)
+  (cond ((null L) nil) ((null (car L)) (removeNILAll (cdr L))) ((atom (car L)) (cons (car L) (removeNILAll (cdr L))))
+     (T (append (removeNILAll (car L)) (removeNILAll (cdr L))))
+    )
+)
+REMOVENILALL
+
+
+
+
+;; Loaded file p2Lisp.txt
+T
+[2]> (load "p2LispRun.txt" :echo T :print T)
+;; Loading file p2LispRun.txt ...
+;;; LISP Program #2 p2LispRun.txt
+
+;;;  #1 removeNILTop
+
+(removeNILTop '(NIL X NIL NIL Y  NIL Z))
+(X Y Z)
+
+(removeNILTop '(X NIL Y NIL Z NIL))
+(X Y Z)
+
+(removeNILTop '(NIL (X NIL Y) (NIL NIL)))
+((X NIL Y) (NIL NIL))
+
+
+;;; #2 removeNILMost
+
+(removeNILMost '(NIL X NIL NIL Y  NIL Z))
+(X Y Z)
+
+(removeNILMost '(X NIL (Y NIL Z) NIL))
+(X (Y Z))
+
+(removeNILMost '(NIL (NIL) (X NIL Y) (NIL NIL) Z))
+(NIL (X Y) NIL Z)
+
+(removeNILMost '(NIL ( (((((NIL) NIL)))))))
+((((((NIL))))))
+
+
+;;; #3 reverseTop
+
+(reverseTop '(X Y Z))
+(Z Y X)
+
+(reverseTop '(X (Y Z (A)) (W)))
+((W) (Y Z (A)) X)
+
+
+;;; #4 reverseALL
+
+(reverseAll '(X Y Z))
+(Z Y X)
+
+(reverseAll '(X (Y Z (A)) (W)))
+((W) ((A) Z Y) X)
+
+
+;;; #5 palindrome
+
+(palindrome '(R A C E C A R))
+T
+
+(palindrome '(W A S I T A C A R O R A C A T I S A W))
+T
+
+(palindrome '(N I X O N))
+NIL
+
+
+;; Loaded file p2LispRun.txt
+T
+[3]> (load "p2LispExtraRun.txt" :echo T :print T)
+;; Loading file p2LispExtraRun.txt ...
+(removeNILAll '(NIL (NIL) (X NIL Y) (NIL NIL) Z))
+(X Y Z)
+
+(removeNILAll '(NIL ( (((((NIL) NIL)))))))
+NIL
+
+(removeNILAll '(NIL (X (NIL) Y) ((NIL)) ))
+(X Y)
+
+(removeNILAll '(NIL (((X ((((((((((NIL)))))))))) Y) Z) W) (((NIL))) ))
+(X Y Z W)
+
+;; Loaded file p2LispExtraRun.txt
+T
+[4]> 

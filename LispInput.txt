@@ -1,0 +1,14 @@
+(defmacro += (x y)
+    `(setf ,x (+ ,x ,y))
+)
+
+(defmacro iterate (i varA varB varC &rest varRest)
+        (let ((iter (eval varC)) 
+             (compare (eval varB))
+             ) 
+       `(do ((i ,varA (+ i ,iter)))
+            ((> i ,compare))
+            ,@ varRest
+            )
+            )
+)
